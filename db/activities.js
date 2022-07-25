@@ -3,6 +3,12 @@ const client = require("./client");
 // database functions
 async function createActivity({ name, description }) {
   // return the new activity
+  //name = name.toLowerCase();
+  await client.query(`CREATE TABLE activity(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT NOT NULL
+  )`)
 }
 
 async function getAllActivities() {
