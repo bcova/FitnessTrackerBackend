@@ -4,12 +4,16 @@ const client = require("./client")
 
 async function dropTables() {
   console.log("Dropping All Tables...")
-  // drop all tables, in the correct order
+  await client.query(`
+  DROP TABLE IF EXISTS fitness
+  `)
 }
 
 async function createTables() {
   console.log("Starting to build tables...")
-  // create all tables, in the correct order
+  await client.query (`
+  CREATE TABLE fitness
+  `)
 }
 
 /* 
