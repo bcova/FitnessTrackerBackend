@@ -5,14 +5,14 @@ const {
   getUser,
   getUserById,
   getUserByUsername,
-  createRoutine
+  createRoutine,
+  createActivity
 } = require('./')
 const client = require("./client")
 
 async function dropTables() {
   console.log("Dropping All Tables...")
   await client.query(`
-  DROP TABLE IF EXISTS fitness;
   DROP TABLE IF EXISTS routine_activities;
   DROP TABLE IF EXISTS routines;
   DROP TABLE IF EXISTS users;
@@ -25,30 +25,14 @@ async function createTables() {
     console.log("Starting to build tables...")
 
     await client.query(`
-    CREATE TABLE fitness(
-      id SERIAL PRIMARY KEY,
-      username VARCHAR(255) UNIQUE NOT NULL,
-      password VARCHAR(255) NOT NULL
-    );`);
-
-    await client.query(`
     CREATE TABLE users(
       id SERIAL PRIMARY KEY,
       username VARCHAR(255) UNIQUE NOT NULL,
       password VARCHAR(255) NOT NULL
     );`);
 
-    await client.query(`
-    CREATE TABLE routine_activities(
-      id SERIAL PRIMARY KEY,
-      "routineId" INTEGER UNIQUE REFERENCES routines (Id),
-      "activityId" INTEGER UNIQUE REFERENCES activities (Id),
-      duration INTEGER,
-      count INTEGER
-    );`);
-
-    await client.query(`
-    CREATE TABLE routine(
+await client.query(`
+    CREATE TABLE routines(
       id SERIAL PRIMARY KEY,
       "creatorId" INTEGER REFERENCES users(id),
       "isPublic" BOOLEAN DEFAULT false,
@@ -62,6 +46,19 @@ async function createTables() {
       name VARCHAR(255) UNIQUE NOT NULL,
       description TEXT NOT NULL
     )`)
+
+    await client.query(`
+    CREATE TABLE routine_activities(
+      id SERIAL PRIMARY KEY,
+      "routineId" INTEGER UNIQUE REFERENCES routines (Id),
+      "activityId" INTEGER UNIQUE REFERENCES activities (Id),
+      duration INTEGER,
+      count INTEGER
+    );`);
+
+    
+
+    
 
 }
 
