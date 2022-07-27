@@ -14,7 +14,7 @@ async function createUser({ username, password}) {
     const { rows: [ user ] } = await client.query(`
     INSERT INTO users (username, password)
     VALUES ($1, $2)
-    RETURNING username;`
+    RETURNING username, id;`
     , [username, hashedPassword])
 
     return user
@@ -38,14 +38,13 @@ if(isValid){
 
 
 async function getUserById(userId) {
-
+  
   try{
   const { rows:[ user ] } = await client.query(`
   SELECT id, username
   FROM users
-  WHERE id=${ userId };
-`);
-
+  WHERE id=$1;
+`, [userId]);
  return user;
  
   }catch (error){
