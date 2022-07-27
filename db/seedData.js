@@ -6,7 +6,10 @@ const {
   getUserById,
   getUserByUsername,
   createRoutine,
-  createActivity
+  createActivity,
+  getRoutinesWithoutActivities,
+  getAllActivities,
+  addActivityToRoutine
 } = require('./')
 const client = require("./client")
 
@@ -50,10 +53,11 @@ await client.query(`
     await client.query(`
     CREATE TABLE routine_activities(
       id SERIAL PRIMARY KEY,
-      "routineId" INTEGER UNIQUE REFERENCES routines (Id),
-      "activityId" INTEGER UNIQUE REFERENCES activities (Id),
+      "routineId" INTEGER REFERENCES routines(id),
+      "activityId" INTEGER REFERENCES activities(id),
       duration INTEGER,
-      count INTEGER
+      count INTEGER,
+      UNIQUE("routineId","activityId")
     );`);
 
     
