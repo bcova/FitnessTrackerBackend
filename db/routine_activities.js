@@ -92,10 +92,8 @@ async function destroyRoutineActivity(id) {
 }
 
 async function canEditRoutineActivity(routineActivityId, userId) {
-console.log(routineActivityId,"111111111111111111111111111111111")
-console.log(userId,"111111111111111111111111111111111")
 
-
+return(routineActivityId===userId ? true : false)
 
 }
 
