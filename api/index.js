@@ -27,4 +27,13 @@ router.use('/routines', routinesRouter);
 const routineActivitiesRouter = require('./routineActivities');
 router.use('/routine_activities', routineActivitiesRouter);
 
+router.use((error, req, res, next) => {
+  console.log('hey, an error happened')
+  res.send({
+    error: error.error,
+    name: error.name,
+    message: error.message
+  });
+});
+
 module.exports = router;
