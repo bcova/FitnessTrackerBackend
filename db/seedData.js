@@ -48,7 +48,7 @@ await client.query(`
       id SERIAL PRIMARY KEY,
       name VARCHAR(255) UNIQUE NOT NULL,
       description TEXT NOT NULL
-    )`)
+    );`);
 
     await client.query(`
     CREATE TABLE routine_activities(

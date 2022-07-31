@@ -1,23 +1,28 @@
-require("dotenv").config()
-const express = require("express")
-const app = express()
-const apiRouter = require('./api');
+require("dotenv").config();
+const express = require("express");
+const app = express();
+const cors = require("cors");
 const morgan = require('morgan');
-var cors = require('cors')
-app.use(cors())
-
-// Setup your Middleware and API Router here
+app.use(express.json());
+app.use(cors());
 app.use(morgan('dev'));
 
-app.use(express.json())
+const apiRouter = require("./api");
+app.use("/api", apiRouter);
 
-app.use((req, res, next) => {
-    console.log("<____Body Logger START____>");
-    console.log(req.body);
-    console.log("<_____Body Logger END_____>");
 
-    next();
+
+app.use((error, req, res, next) => {
+  res.send({
+    name: error.name,
+    message: error.message,
+    error: error.message,
+  });
+});
+
+app.use(function (req, res, next){
+  res.status(404).send({
+    message: "This is a 404 error"
+  })
 })
-    app.use('/api', apiRouter)
-
 module.exports = app;

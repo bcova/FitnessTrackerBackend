@@ -1,43 +1,35 @@
+/* eslint-disable no-useless-catch */
 const client = require("./client");
 
 // database functions
 async function createActivity({ name, description }) {
-  // return the new activity
-  //name = name.toLowerCase();
-
-  // const lowerName = name.toLowerCase()
 
   try {
     const {rows: [activity] } = await client.query(`
-    INSERT INTO activities(name, description)
+    INSERT INTO activities (name, description)
     VALUES ($1, $2)
-    RETURNING id, name, description;
+    ON CONFLICT DO NOTHING
+    RETURNING *;
     `, [name, description]);
     return activity
   } catch (error) {
     throw error;
   }
-
-
 }
 
 async function getAllActivities() {
   // select and return an array of all activities
 
-  try { const { rows: activity } = await client.query(
-    `SELECT id
-    FROM activities;
-  `);
-
-  const activities = await Promise.all(activity.map(
-    activity => getActivityById( activity.id )
-  ));
-
-  return activities;
-
-  }catch(error){
-    throw error;
-  }
+  try{
+    const { rows } = await client.query(`
+      SELECT *
+      FROM activities;
+    `);
+    return rows;}
+    catch(error) {
+      console.error("Errors in get all Activities")
+      throw error
+    }
 }
 
 async function getActivityById(id) {
@@ -62,7 +54,6 @@ async function getActivityByName(name) {
     FROM activities
     WHERE name=$1
     `, [name]);
-
     return activity;
   } catch (error) {
     throw error;
