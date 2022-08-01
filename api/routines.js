@@ -54,9 +54,8 @@ router.patch('/:routineId',requireUser, async (req, res, next) => {
 })
 // DELETE /api/routines/:routineId
 router.delete('/:routineId', requireUser, async (req, res, next) => {
-    const id = req.params.routineId;
-    const routine = await getRoutineById(id)
-
+    const routineId = req.params.routineId;
+    const routine = await getRoutineById(routineId)
     try {
           if(routine.creatorId != req.user.id){
             res.status(403)
@@ -65,7 +64,7 @@ router.delete('/:routineId', requireUser, async (req, res, next) => {
                 message: `User ${req.user.username} is not allowed to delete ${routine.name}`
               });
           }else{
-            destroyRoutine(id)
+            destroyRoutine(routineId)
             res.send(routine)
           }
     }catch ({ name, message }) {
